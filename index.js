@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000
 express()
 	.use(express.static(path.join(__dirname, 'public')))
 	.set('views', path.join(__dirname, 'views'))
-	.set('view engine', 'pug')
+	.set('view engine', 'ejs')
 	.get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
