@@ -21,8 +21,9 @@ express()
     try {
       const client = await pool.connect()
       const result = await client.query('SELECT * FROM restaurantinfo');
-      const results = { 'results': (result) ? result.rows : null};
-      res.render('pages/db', results );
+      const results = { 'results': (result) ? result.rows : null};      
+      console.log('GOT DATA', results[0])
+      res.render('pages/db', results[0] );
       client.release();
     } catch (err) {
       console.error(err);
