@@ -2,12 +2,17 @@ console.log(process.env.DATABASE_URL)
 const { Pool } = require('pg');
 const pool = new Pool({	
   connectionString: process.env.DATABASE_URL,
+  // user: process.env.USER,
+  // password: process.env.PASSWORD,
+  // database: process.env.DATABASE,
+  // port: process.env.PORT,
+  // host: process.env.HOST,
   ssl: true
 });
 const path = require('path')
 const express = require('express')
-const PORT = process.env.PORT || 5000
-// const PORT = 5000
+// const PORT = process.env.PORT || 5000
+const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
 // console.log(PORT)
 // let port = process.env.PORT;
 // if (port == null || port == "") {
@@ -17,15 +22,19 @@ express()
 	.use(express.static(path.join(__dirname, 'public')))
 	.set('views', path.join(__dirname, 'views'))
 	.set('view engine', 'ejs')
+	.get('/', (req, res) => res.render('pages/index'))
 	.get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
-      const result = await client.query('SELECT * FROM restaurantinfo');
+      const result = await client.query('SELECT restaurant FROM restaurantinfo limit 20');
+      console.log('GOT DATA', result)
       const results = { 'results': (result) ? result.rows : null};      
-      console.log('GOT DATA', results[0])
-      res.render('pages/db', results[0] );
+      console.log("number of rows", results)
+      res.send(results)
+      // res.render('pages/db', results );
       client.release();
     } catch (err) {
+    	console.log('HELP ME')
       console.error(err);
       res.send("Error " + err);
     }
