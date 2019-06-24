@@ -18,7 +18,9 @@
   "homepage": "https://github.com/iwannabetall/FoodMap-v2#readme",
   "dependencies": {
     "dotenv": "^8.0.0",
+    "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "pg": "^7.11.0"
+    "pg": "^7.11.0",
+    "pug": "^2.0.4"
   }
 }
