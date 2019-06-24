@@ -11,8 +11,8 @@ const pool = new Pool({
 });
 const path = require('path')
 const express = require('express')
-// const PORT = process.env.PORT || 5000
-const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
+const PORT = process.env.PORT || 5000
+// const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
 // console.log(PORT)
 // let port = process.env.PORT;
 // if (port == null || port == "") {
