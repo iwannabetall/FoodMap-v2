@@ -14,7 +14,7 @@ app.use(
   })
 )
 
-console.log(process.env.DATABASE_URL)
+// console.log(process.env.DATABASE_URL)
 
 // postgres://user:secret@localhost:5432/mydatabasename 
 //URI?? // postgres://user:foodie@localhost:5432/foodmap  
