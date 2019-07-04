@@ -1,3 +1,16 @@
+const { Pool } = require('pg');
+
+// production side 
+const pool = new Pool({	
+  connectionString: process.env.DATABASE_URL,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.PORT,
+  host: process.env.HOST,
+  ssl: true
+  // sslfactory: org.postgresql.ssl.NonValidatingFactory
+});
 
 
 exports.getData = async (req, res, next) => {
