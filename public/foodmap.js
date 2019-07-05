@@ -193,8 +193,7 @@ function donutSegment(start, end, r, r0, color) {
 }
 
 
-// side bar display 
-
+//click on a cluster- side bar display  
 document.addEventListener('click', function (e) {
       // console.log(e.target.parentNode)
       // if click on a cluster - check by using e.target.parentNode to see if clicked SVG 
@@ -211,7 +210,7 @@ document.addEventListener('click', function (e) {
 
 	      // Get all points under a cluster
 	      clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
-	        // console.log('getClusterLeaves', err, aFeatures);
+	        console.log('getClusterLeaves', err, aFeatures);
 	        // sort points in order of favs to least fav 
 	        
 	        var sortedRecs = aFeatures.sort(function(a, b) {
@@ -227,20 +226,23 @@ document.addEventListener('click', function (e) {
 	        if (recs.length > 0) {
 		        	// creat rec list to show on cluster click
 		        var recList = []
-		        var noDupes = [] // keep track of what's here to count number of locations?	     	        
+		        var noDupes = [] // keep track of what's here to count number of locations?		        
 		        var displayCount = recs.length >= 20 ? 20 : recs.length	
-		        var recHTML = "Some recs! Faves are &#x1F31F'd<br>"
+		        var recHTML = "<div class='displayRecsHeader'>Some recs! Faves are &#x1F31F'd</div><br>"
 	        	for (i=0; i < displayCount; i++) {
 	        		// var rec = {}
+	        		// show unique list of no more than 10 recs
 	        		if (!noDupes.includes(recs[i].properties.id) && noDupes.length <= 10){
 	        			
 	        			var fav = recs[i].properties.rating == 10 ? '&#x1F31F' : ''
-	        			
+	        			var count = recs.filter((restaurant) => (restaurant.properties.id == recs[i].properties.id)).length
+	        			console.log(recs[i].properties.restaurant, ' has ', count, ' locations')
+
 	        			// not all places have websites
 	        			if (recs[i].properties.yelpurl == null) {
-	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'
+	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' data-coordinates=' + recs[i].geometry.coordinates + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'
 	        			} else {
-	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + '<a target="_blank" href="' + recs[i].properties.yelpurl + '">' + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'	
+	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' data-coordinates=' + recs[i].geometry.coordinates + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + '<a target="_blank" href="' + recs[i].properties.yelpurl + '">' + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'	
 	        			}
 	        				        			
 	        			// console.log(recHTML)
@@ -266,14 +268,21 @@ document.addEventListener('click', function (e) {
         
     }
 
-    // if individual marker 
-
-
 }, false);
+
+
+// click on infobox -> zoom to that location on the map and bounce all locations (can't bounce unless hide clustering...could )
+	// - hover shows photo or preview of yelp??
+document.getElementById('infoBox').addEventListener('click', function(e){
+	
+	var loc = [parseFloat(e.target.dataset.coordinates.split(',')[0]), parseFloat(e.target.dataset.coordinates.split(',')[1])]
+	map.flyTo({center: loc, zoom: 16});	
+})
 
 // popup window on marker click
 map.on('click', 'earthquake_circle', function(e) {
 	// console.log(e.features[0].properties.description)
+	// console.log(e.features[0].geometry.coordinates)
 	// console.log(e.features[0])
 	var coordinates = e.features[0].geometry.coordinates.slice();
 	if (e.features[0].properties.yelpurl == 'null') { //why is null a string here

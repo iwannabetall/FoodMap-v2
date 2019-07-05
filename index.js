@@ -14,8 +14,8 @@ app.use(
   })
 )
 
-const PORT = process.env.PORT || 5000
-// const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
+// const PORT = process.env.PORT || 5000
+const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
 
 app
 	.use(express.static(path.join(__dirname, 'public')))
