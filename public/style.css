@@ -86,7 +86,7 @@ h1{
 		padding-left:15px;
 		padding-right: 15px; 
 		padding-top: 15px;
-		overflow-y: hidden;
+		overflow-y: scroll;
 	}
 
 	.displayRecs, .displayRecsHeader {
