@@ -82,3 +82,16 @@ exports.reformatToGeoJSON = (req, res, next) => {
 
 	next()
 }
+
+
+const getUserById = (request, response) => {
+  const id = parseInt(request.params.id)
+
+  pool.query('SELECT restaurant FROM reviews WHERE id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+//   pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {

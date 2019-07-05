@@ -23,14 +23,16 @@ h1{
   display: none;
 }
 .popup{
-
+/*	cant get popup to scroll wtf*/
 	font-size: 16px;
-	overflow-y:scroll !important;	
+	/*overflow-y:scroll !important;	*/
+	/*max-height: 300px;*/
 }
 .mapboxgl-popup-content {
 	padding-left: 10px;
 	padding-right: 10px;
-	overflow-y:scroll !important;;	
+	/*max-height: 300px;*/
+	/*overflow-y:hidden !important;*/
 	font-size: 1em;
 
 }
