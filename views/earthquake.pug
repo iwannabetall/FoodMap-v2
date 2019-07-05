@@ -2,7 +2,7 @@ doctype html
 html
 	head
 		meta(charset='utf-8')
-		title Display HTML clusters with custom properties
+		title Say No to Mediocre Food
 		meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
 		script(src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js')
 		link(href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css', rel='stylesheet')
@@ -10,25 +10,15 @@ html
 		//- link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
 			
 	body
-		#infoBox
-			.displayRecs
-				h1 Hungry and Looking for Food? 
-				br
-				br
-				br
-				br
-				p Me too.  I'm always hungry.
-				br
-				br
-				br
-				br
-				p Try clicking on a cluster! 
-				br
-				br
-				br
-				br
-				p Yes, I realize a donut chart is basically a pie chart.
-		#map
+		.container
+			#infoBox
+				.displayRecs
+					h1 Hungry?
+					.intro.desktop Me too.  I'm always hungry.			
+					.intro.mobile Try clicking on a cluster and don't forget to leave America!
+					.intro.desktop Try clicking on a cluster!
+					.intro Yes, I realize a donut chart is basically a pie chart.
+			#map
 		script(type='text/javascript').
 			var reviews =!{JSON.stringify(geojsonData)}
 		script(type='text/javascript', src='/foodmap.js')

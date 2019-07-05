@@ -16,20 +16,18 @@ app.use(
 
 // console.log(process.env.DATABASE_URL)
 
-// postgres://user:secret@localhost:5432/mydatabasename 
-//URI?? // postgres://user:foodie@localhost:5432/foodmap  
 
 // production side 
-const pool = new Pool({	
-  connectionString: process.env.DATABASE_URL,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-  port: process.env.PORT,
-  host: process.env.HOST,
-  ssl: true
-  // sslfactory: org.postgresql.ssl.NonValidatingFactory
-});
+// const pool = new Pool({	
+//   connectionString: process.env.DATABASE_URL,
+//   user: process.env.USER,
+//   password: process.env.PASSWORD,
+//   database: process.env.DATABASE,
+//   port: process.env.PORT,
+//   host: process.env.HOST,
+//   ssl: true
+//   // sslfactory: org.postgresql.ssl.NonValidatingFactory
+// });
 
 // const express = require('express')
 const PORT = process.env.PORT || 5000
@@ -55,20 +53,20 @@ app
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 
-const getAllData = (req, res) => {
-  var queryStr = 'SELECT a.restaurant, a.rating, a.pricerange, a.value, a.PriceDetails, a.tried, a.thoughts, a.WouldIReturn, b.yelpURL, b.latitude, b.longitude, b.is_closed, b.streetAddress, b.categories, b.city, b.state, b.region from reviews a inner join restaurantinfo b on a.id= b.restaurant_id limit 10;'
-  pool.query(queryStr, (err, results) => {
-    if (err) {
-      throw err
-    }
-    console.log(results[1])
-    res.status(200).json(results.row)
-  })
+// const getAllData = (req, res) => {
+//   var queryStr = 'SELECT a.restaurant, a.rating, a.pricerange, a.value, a.PriceDetails, a.tried, a.thoughts, a.WouldIReturn, b.yelpURL, b.latitude, b.longitude, b.is_closed, b.streetAddress, b.categories, b.city, b.state, b.region from reviews a inner join restaurantinfo b on a.id= b.restaurant_id limit 10;'
+//   pool.query(queryStr, (err, results) => {
+//     if (err) {
+//       throw err
+//     }
+//     console.log(results[1])
+//     res.status(200).json(results.row)
+//   })
 
   
-}
+// }
 
-app.get('/test', getAllData)
+// app.get('/test', getAllData)
 
 
 const getUserById = (request, response) => {

@@ -240,7 +240,7 @@ document.addEventListener('click', function (e) {
 	        			if (recs[i].properties.yelpurl == null) {
 	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'
 	        			} else {
-	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + '<a href="' + recs[i].properties.yelpurl + '">' + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'	
+	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + '<a target="_blank" href="' + recs[i].properties.yelpurl + '">' + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'	
 	        			}
 	        				        			
 	        			// console.log(recHTML)
