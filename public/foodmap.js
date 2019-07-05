@@ -2,7 +2,7 @@ console.log(reviews)
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFyaGVlbDMwMDciLCJhIjoiY2p4aHlocXJ1MGkwZjN5bzVhZm5sd3N5ZyJ9.CPURwnBFE4Wk-674CYd5NA';
 var map = new mapboxgl.Map({
     container: 'map',
-    zoom: 1.43,
+    zoom: 0, // 1.43 for web page
     center: [7.045, 0], //center from map.getCenter()
     style: 'mapbox://styles/mapbox/light-v10'
 });
@@ -272,7 +272,6 @@ document.addEventListener('click', function (e) {
 }, false);
 
 // popup window on marker click
-
 map.on('click', 'earthquake_circle', function(e) {
 	// console.log(e.features[0].properties.description)
 	// console.log(e.features[0])
@@ -314,7 +313,7 @@ map.on('click', 'earthquake_circle', function(e) {
 		new mapboxgl.Popup({offset: popupOffsets, className: 'popup'})
 			.setLngLat(coordinates)
 			.setHTML(description)
-			.setMaxWidth("320px")
+			.setMaxWidth("300px")
 			.addTo(map);
 })
 

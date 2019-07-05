@@ -36,12 +36,17 @@ h1{
 }
 
 
-
+.mobile{
+	/*not sure why these wouldnt work without important*/
+	display: none !important;
+}
 
 /*iphone 5s - 325*/
 /*iphone 6/7/8/X - 450*/
 @media (max-width:767px){
-
+	.mobile{
+		display: block !important;
+	}
 
 	/*things to display for desktop only*/
 	.desktop{
@@ -49,6 +54,8 @@ h1{
 	}
 	.intro{
 		margin-bottom: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 	.container {
 		display: flex;
@@ -94,13 +101,13 @@ h1{
 
 /*if screen > 992 px*/
 @media (min-width:768px){
-	.mobile{
-		display: none;
-	}
+
 	.intro{
 		display: block;
 		margin-bottom: 20px;
-		margin-top: 20px;
+		margin-top: 40px;
+		padding-left: 20px;
+		padding-right: 10px;
 	}
 /*	.container {
 		display: flex;
@@ -117,16 +124,17 @@ h1{
 	}
 
 	#infoBox{		
+		display: block;
 		width: 20%;
-		padding-left: 20px;
 		padding-top: 15px;
-		padding-right: 10px;
+		overflow-y: hidden;
 	}
 
 	.displayRecs {
 		display: inline-block;
-		width: 80%;
 		margin-top: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
 		margin-bottom: 5px;
 	}
 

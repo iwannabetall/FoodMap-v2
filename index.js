@@ -14,29 +14,9 @@ app.use(
   })
 )
 
-// console.log(process.env.DATABASE_URL)
-
-
-// production side 
-// const pool = new Pool({	
-//   connectionString: process.env.DATABASE_URL,
-//   user: process.env.USER,
-//   password: process.env.PASSWORD,
-//   database: process.env.DATABASE,
-//   port: process.env.PORT,
-//   host: process.env.HOST,
-//   ssl: true
-//   // sslfactory: org.postgresql.ssl.NonValidatingFactory
-// });
-
-// const express = require('express')
 const PORT = process.env.PORT || 5000
 // const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
-// console.log(PORT)
-// let port = process.env.PORT;
-// if (port == null || port == "") {
-//   port = 8000;
-// }
+
 app
 	.use(express.static(path.join(__dirname, 'public')))
 	.set('views', path.join(__dirname, 'views'))
