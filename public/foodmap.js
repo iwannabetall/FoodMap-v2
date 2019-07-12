@@ -1,4 +1,4 @@
-console.log(reviews)
+// console.log(reviews)
 // global vars for the display
 var recHTML
 var currentZoom
@@ -83,23 +83,6 @@ map.on('load', function () {
         }
     });
     
-    // new layer for clustered points
-    // map.addLayer({
-    //     "id": "cluster",
-    //     "type": "symbol",
-    //     "source": "earthquakes",
-    //     "interactive": true,
-    //     "layout": {
-    //         "icon-image": "star-15",
-    //         "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-    //         "text-anchor": "top",
-    //         "text-field": "{point_count}",
-    //         "text-offset": [0, 0.6],
-    //         "text-size" : 12
-    //     },
-    //     "filter": [">=", "point_count", 2]
-    // });
-
     // objects for caching and keeping track of HTML marker objects (for performance)
     var markers = {};
     var markersOnScreen = {};
@@ -218,7 +201,7 @@ document.addEventListener('click', function (e) {
 
 	      // Get all points under a cluster
 	      clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
-	        console.log('getClusterLeaves', err, aFeatures);
+	        // console.log('getClusterLeaves', err, aFeatures);
 	        // sort points in order of favs to least fav 
 	        
 	        var sortedRecs = aFeatures.sort(function(a, b) {
@@ -245,7 +228,7 @@ document.addEventListener('click', function (e) {
 	        			var fav = recs[i].properties.rating == 10 ? '&#x1F31F' : ''
 	        			var allLocations = recs.filter((restaurant) => (restaurant.properties.id == recs[i].properties.id))
 	        			var numLocations = allLocations.length
-	        			console.log(allLocations)
+	        			// console.log(allLocations)
 	        			// console.log(recs[i].properties.restaurant, ' has ', numLocations, ' locations')
 
 	        			// not all places have websites
@@ -292,7 +275,7 @@ document.getElementById('infoBox').addEventListener('click', function(e){
 	// if click on rec from cluster, show all locations 
 	if (e.target.className == 'displayRecs') {
 		// console.log(restaurantLocs)
-		var allLocHTML = "<div class='locationsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations In The Vicinity</strong></div><br>"	
+		var allLocHTML = "<div class='locationsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations in the Vicinity</strong></div><br>"	
 		for(i=0; i < restaurantLocs.length; i++) {
 			// console.log(restaurantLocs[i].properties.phone)
 			var phoneDisplay = restaurantLocs[i].properties.phone == null ? '' : restaurantLocs[i].properties.phone
@@ -338,7 +321,7 @@ function createReviewHTML(dataObj) {
 	// creates the review info display with a button to return to recs.  
 
 	var coordinates = dataObj.geometry.coordinates.slice();
-	console.log(coordinates)
+	// console.log(coordinates)
 	if (dataObj.properties.yelpurl == 'null') { //why is null a string here
 		var header = '<h3>' + dataObj.properties.restaurant + '</h3>' + '<br>'
 	} else {
