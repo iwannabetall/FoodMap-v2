@@ -15,7 +15,7 @@ const pool = new Pool({
 
 
 exports.getData = async (req, res, next) => {
-	var queryStr = "SELECT a.id, b.restaurant, a.rating, a.pricerange, a.value, a.PriceDetails, a.tried, a.thoughts, a.WouldIReturn, b.yelpURL, b.yelpRating, b.reviewcount, b.latitude, b.longitude, b.phone, b.is_closed, b.streetAddress, b.categories, b.city, b.state, b.region from reviews a inner join restaurantinfo b on a.id= b.restaurant_id where is_closed IS NOT TRUE;"
+	var queryStr = "SELECT a.id, b.restaurant, a.rating, a.pricerange, a.value, a.PriceDetails, a.tried, a.thoughts, a.WouldIReturn, b.yelpURL, b.yelpRating, b.reviewcount, b.latitude, b.longitude, b.phone, b.is_closed, b.streetAddress, b.categories, b.location, b.city, b.state, b.region from reviews a inner join restaurantinfo b on a.id= b.restaurant_id where is_closed IS NOT TRUE;"
 
     try {
       const client = await pool.connect()
@@ -42,7 +42,7 @@ exports.getData = async (req, res, next) => {
 
 
 exports.getClosed = async (req, res, next) => {
-	var queryStr = "SELECT a.id, b.restaurant, a.rating, a.pricerange, a.value, a.PriceDetails, a.tried, a.thoughts, a.WouldIReturn, b.yelpURL, b.yelpRating, b.reviewcount, b.latitude, b.longitude, b.phone, b.is_closed, b.streetAddress, b.categories, b.city, b.state, b.region from reviews a inner join restaurantinfo b on a.id= b.restaurant_id where is_closed = 'TRUE';"
+	var queryStr = "SELECT a.id, b.restaurant, a.rating, a.pricerange, a.value, a.PriceDetails, a.tried, a.thoughts, a.WouldIReturn, b.yelpURL, b.yelpRating, b.reviewcount, b.latitude, b.longitude, b.phone, b.is_closed, b.streetAddress, b.categories, b.location, b.city, b.state, b.region from reviews a inner join restaurantinfo b on a.id= b.restaurant_id where is_closed = 'TRUE';"
 
     try {
       const client = await pool.connect()
@@ -101,6 +101,7 @@ exports.reformatToGeoJSON = (req, res, next) => {
 		rowData.properties.wouldireturn = dataToConvert[i].wouldireturn
 		rowData.properties.yelpurl = dataToConvert[i].yelpurl
 		rowData.properties.city = dataToConvert[i].city
+		rowData.properties.location = dataToConvert[i].location // more precise location/city - from yelp
 		rowData.properties.phone = dataToConvert[i].phone
 		rowData.properties.streetaddress = dataToConvert[i].streetaddress
 		rowData.properties.cuisine = dataToConvert[i].categories

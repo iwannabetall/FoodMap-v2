@@ -5,6 +5,8 @@ var currentZoom
 // var allLocHTML 
 var recs // list of restaurants and their info 
 
+var recButtonHTML = '<br><div id="buttonBox"><button type = "button" id="showRecsButton"> Back to Recommendations </button></div>' 
+
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFyaGVlbDMwMDciLCJhIjoiY2p4aHlocXJ1MGkwZjN5bzVhZm5sd3N5ZyJ9.CPURwnBFE4Wk-674CYd5NA';
 var map = new mapboxgl.Map({
     container: 'map',
@@ -225,8 +227,8 @@ document.addEventListener('click', function (e) {
 	        
 	        recs = sortedRecs.filter((x) => (x.properties.rating >= 8))
 
-	        // if no recs, look for places >=6
-	        if (recs.length == 0) {
+	        // if zero or one rec, look for places >=6
+	        if (recs.length <= 1) {
 	        	recs = sortedRecs.filter((x) => (x.properties.rating >= 6))
 	        }
 	        if (recs.length > 0) {
@@ -281,89 +283,114 @@ document.addEventListener('click', function (e) {
 
 
 // click on infobox -> zoom to that location on the map and bounce all locations (can't bounce unless hide clustering...could )
+// SHOW ALL LOCATIONS + PHONE NUMBER OF A PLACE CLICKED ON IN INFOBOX
 	// - hover shows photo or preview of yelp??
 document.getElementById('infoBox').addEventListener('click', function(e){
-	
+
 	var restaurantLocs = recs.filter((restaurant) => (restaurant.properties.id == e.target.dataset.id))
-	console.log(restaurantLocs)
-	var allLocHTML = "<div class='displayRecsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations</strong></div><br>"	
-	for(i=0; i < restaurantLocs.length; i++) {
-		console.log(restaurantLocs[i].properties.phone)
-		var phoneDisplay = restaurantLocs[i].properties.phone == null ? '' : restaurantLocs[i].properties.phone
-				// not all places have websites
-		if (restaurantLocs[i].properties.yelpurl == null) {
-			allLocHTML = allLocHTML + '<div data-id=' + e.target.dataset.id + ' data-coordinates=' + restaurantLocs[i].geometry.coordinates + ' class=displayRecs>' + restaurantLocs[i].properties.streetaddress + ', ' + restaurantLocs[i].properties.city +' <br> ' + phoneDisplay + ' </div>'
-		} else {
-			allLocHTML = allLocHTML + '<div data-id=' + e.target.dataset.id + ' data-coordinates=' + restaurantLocs[i].geometry.coordinates + ' class=displayRecs>' + restaurantLocs[i].properties.streetaddress + ', ' + restaurantLocs[i].properties.city + '<br><a target="_blank" href="' + restaurantLocs[i].properties.yelpurl + '">' + restaurantLocs[i].properties.yelprating + ' 		&#9733 on ' + restaurantLocs[i].properties.reviewcount + ' Yelp Reviews</a> '+' <br> ' + phoneDisplay + '</div>'
+
+	// if click on rec from cluster, show all locations 
+	if (e.target.className == 'displayRecs') {
+		// console.log(restaurantLocs)
+		var allLocHTML = "<div class='locationsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations</strong></div><br>"	
+		for(i=0; i < restaurantLocs.length; i++) {
+			// console.log(restaurantLocs[i].properties.phone)
+			var phoneDisplay = restaurantLocs[i].properties.phone == null ? '' : restaurantLocs[i].properties.phone
+					// not all places have websites
+			if (restaurantLocs[i].properties.yelpurl == null) {
+				allLocHTML = allLocHTML + '<div data-id=' + e.target.dataset.id + ' data-coordinates=' + restaurantLocs[i].geometry.coordinates + ' class=locations>' + restaurantLocs[i].properties.streetaddress + ', ' + restaurantLocs[i].properties.location +' <br> ' + phoneDisplay + ' </div>'
+			} else {
+				allLocHTML = allLocHTML + '<div data-id=' + e.target.dataset.id + ' data-coordinates=' + restaurantLocs[i].geometry.coordinates + ' class=locations>' + restaurantLocs[i].properties.streetaddress + ', ' + restaurantLocs[i].properties.location + '<br><a target="_blank" href="' + restaurantLocs[i].properties.yelpurl + '">' + restaurantLocs[i].properties.yelprating + ' 		&#9733 on ' + restaurantLocs[i].properties.reviewcount + ' Yelp Reviews</a> '+' <br> ' + phoneDisplay + '</div>'
+			}
+
 		}
 
+		allLocHTML = allLocHTML + recButtonHTML
+
+		document.getElementById('infoBox').innerHTML = allLocHTML
+
+		//add event listener to trigger button to show recommended 
+		var recButton = document.getElementById('showRecsButton')
+
+		recButton.addEventListener('click', () => {		
+			
+			map.flyTo({center: loc, zoom: currentZoom});	 // or should i zoom to 
+			document.getElementById('infoBox').innerHTML = recHTML
+		})
+
+		// fly to place
+		var loc = [parseFloat(e.target.dataset.coordinates.split(',')[0]), parseFloat(e.target.dataset.coordinates.split(',')[1])]
+		map.flyTo({center: loc, zoom: 16});			
+	} 
+	else if (e.target.className == 'locations') {
+		// clicked on a location, show review info
+		createReviewHTML(restaurantLocs[0])
+		// console.log(restaurantLocs)
+	
 	}
 
-	allLocHTML = allLocHTML + '<br><div id="buttonBox"><button type = "button" id="showRecsButton"> Back to Recommendations </button></div>' 
+})
 
-	document.getElementById('infoBox').innerHTML = allLocHTML
+function createReviewHTML(dataObj) {
+	// creates the review info display with a button to return to recs.  
+
+	var coordinates = dataObj.geometry.coordinates.slice();
+	console.log(coordinates)
+	if (dataObj.properties.yelpurl == 'null') { //why is null a string here
+		var header = '<h3>' + dataObj.properties.restaurant + '</h3>' + '<br>'
+	} else {
+		var header = '<h3> <a target="_blank" href=' + dataObj.properties.yelpurl + '>'+ dataObj.properties.restaurant + '</a></h3>' + '<br>'
+	}
+	
+	var cuisine = '<div class=review><u>Price</u>: ' +dataObj.properties.cuisine + '</div>'
+	var price = '<div class=review><u>Price</u>: ' + dataObj.properties.pricerange + '</div>'
+	var tried = '<div class=review><u>Tried</u>: ' + dataObj.properties.tried + '</div>'
+	var thoughts = '<div class=review><u>Thoughts</u>: ' + dataObj.properties.thoughts + '</div>'
+	var wouldIreturn = '<div class=review><u>Would I Return</u>: ' + dataObj.properties.wouldireturn + '</div>'
+
+	var description = '<div class=displayRecs>' + header + price + tried + thoughts + wouldIreturn + recButtonHTML + '</div>'
+	 
+		document.getElementById('infoBox').innerHTML = description
 
 	//add event listener to trigger button to show recommended 
 	var recButton = document.getElementById('showRecsButton')
 
 	recButton.addEventListener('click', () => {		
 		
-		map.flyTo({center: loc, zoom: currentZoom});	 // or should i zoom to 
+		map.flyTo({center: coordinates, zoom: currentZoom});	 // or should i zoom to 
 		document.getElementById('infoBox').innerHTML = recHTML
 	})
-
-	// fly to place
-	var loc = [parseFloat(e.target.dataset.coordinates.split(',')[0]), parseFloat(e.target.dataset.coordinates.split(',')[1])]
-	map.flyTo({center: loc, zoom: 16});	
-})
-
-
+}
 	
 // popup window on marker click
 map.on('click', 'earthquake_circle', function(e) {
-	console.log(e.features[0].properties)
-	// console.log(e.features[0].geometry.coordinates)
-	// console.log(e.features[0])
-	var coordinates = e.features[0].geometry.coordinates.slice();
-	if (e.features[0].properties.yelpurl == 'null') { //why is null a string here
-		var header = '<h3>' + e.features[0].properties.restaurant + '</h3>' + '<br>'
-	} else {
-		var header = '<h3> <a target="_blank" href=' + e.features[0].properties.yelpurl + '>'+ e.features[0].properties.restaurant + '</a></h3>' + '<br>'
-	}
-	
-	var cuisine = '<u>Price</u>: ' +e.features[0].properties.cuisine + '<br>'
-	var price = '<u>Price</u>: ' + e.features[0].properties.pricerange + '<br>'
-	var tried = '<u>Tried</u>: ' + e.features[0].properties.tried + '<br>'
-	var thoughts = '<u>Thoughts</u>: ' + e.features[0].properties.thoughts + '<br>'
-	var wouldIreturn = '<u>Would I Return</u>: ' + e.features[0].properties.wouldireturn + '<br>'
+	createReviewHTML(e.features[0])
 
-	var description = '<div>' + header + price + tried + thoughts + wouldIreturn + '</div>'
-	 
 	// Ensure that if the map is zoomed out such that multiple
 	// copies of the feature are visible, the popup appears
 	// over the copy being pointed to.
-	while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-		coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-	}
+	// while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+	// 	coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+	// }
 
 // marker height adjusts space btwn tooltip and marker??
-	var markerHeight = 50, markerRadius = 10, linearOffset = 25;
-	var popupOffsets = {
-	 'top': [0, 0],
-	 'top-left': [0,0],
-	 'top-right': [0,0],
-	 'bottom': [0, -markerHeight],
-	 'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-	 'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-	 'left': [markerRadius, (markerHeight - markerRadius) * -1],
-	 'right': [-markerRadius, (markerHeight - markerRadius) * -1]
-	 };
+	// var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+	// var popupOffsets = {
+	//  'top': [0, 0],
+	//  'top-left': [0,0],
+	//  'top-right': [0,0],
+	//  'bottom': [0, -markerHeight],
+	//  'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+	//  'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+	//  'left': [markerRadius, (markerHeight - markerRadius) * -1],
+	//  'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+	//  };
 		 
-		new mapboxgl.Popup({offset: popupOffsets, className: 'popup'})
-			.setLngLat(coordinates)
-			.setHTML(description)
-			.setMaxWidth("300px")
-			.addTo(map);
+	// 	new mapboxgl.Popup({offset: popupOffsets, className: 'popup'})
+	// 		.setLngLat(coordinates)
+	// 		.setHTML(description)
+	// 		.setMaxWidth("300px")
+	// 		.addTo(map);
 })
 
 function hasClass(elem, className) {

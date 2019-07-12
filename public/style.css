@@ -103,10 +103,29 @@ h1{
 		background-color: #b2d0e8;		
 	}
 
-	.locations{
+/*	.locations{
 		padding-left: 10px;
 		padding-right: 10px;
 		display: block;
+	}*/
+
+	.locations:hover{
+		background-color: #b2d0e8;
+	}
+
+	.locations, .locationsHeader{
+		display: block; 
+		/*or should it be display block*/
+		margin-top: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+		margin-bottom: 5px;
+	}
+	.review {
+		padding-left: 10px;
+		padding-right: 10px;
+		display: block;
+		margin-bottom: 10px;
 	}
 
 	#buttonBox{
@@ -129,6 +148,10 @@ h1{
 
 /*if screen > 992 px*/
 @media (min-width:768px){
+
+	h3{
+		margin-top: 10px;
+	}
 
 	.intro{
 		display: block;
@@ -173,10 +196,24 @@ h1{
 		background-color: #b2d0e8;
 	}
 
-	.locations{
+	.locations:hover{
+		background-color: #b2d0e8;
+	}
+
+	.locations, .locationsHeader{
+		display: block; 
+		/*or should it be display block*/
+		margin-top: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+		margin-bottom: 5px;
+	}
+
+	.review {
 		padding-left: 10px;
 		padding-right: 10px;
 		display: block;
+		margin-bottom: 10px;
 	}
 
 	#buttonBox{
