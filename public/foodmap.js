@@ -292,7 +292,7 @@ document.getElementById('infoBox').addEventListener('click', function(e){
 	// if click on rec from cluster, show all locations 
 	if (e.target.className == 'displayRecs') {
 		// console.log(restaurantLocs)
-		var allLocHTML = "<div class='locationsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations</strong></div><br>"	
+		var allLocHTML = "<div class='locationsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations In The Vicinity</strong></div><br>"	
 		for(i=0; i < restaurantLocs.length; i++) {
 			// console.log(restaurantLocs[i].properties.phone)
 			var phoneDisplay = restaurantLocs[i].properties.phone == null ? '' : restaurantLocs[i].properties.phone
