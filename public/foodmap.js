@@ -325,6 +325,9 @@ document.getElementById('infoBox').addEventListener('click', function(e){
 	else if (e.target.className == 'locations') {
 		// clicked on a location, show review info
 		createReviewHTML(restaurantLocs[0])
+		console.log(e.target.dataset.coordinates)
+		var loc = [parseFloat(e.target.dataset.coordinates.split(',')[0]), parseFloat(e.target.dataset.coordinates.split(',')[1])]
+		map.flyTo({center: loc, zoom: 16});			
 		// console.log(restaurantLocs)
 	
 	}
