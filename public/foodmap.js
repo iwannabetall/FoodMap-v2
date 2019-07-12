@@ -1,4 +1,10 @@
 console.log(reviews)
+// global vars for the display
+var recHTML
+var currentZoom
+// var allLocHTML 
+var recs // list of restaurants and their info 
+
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFyaGVlbDMwMDciLCJhIjoiY2p4aHlocXJ1MGkwZjN5bzVhZm5sd3N5ZyJ9.CPURwnBFE4Wk-674CYd5NA';
 var map = new mapboxgl.Map({
     container: 'map',
@@ -29,7 +35,7 @@ map.on('load', function () {
 // 'cluster' option to true. GL-JS will add the point_count property to your source data.
     map.addSource('earthquakes', {
         "type": "geojson",
-        "data": reviews,        
+        "data": reviews, 
         "cluster": true,
         "clusterRadius": 42, // Radius of each cluster when clustering points - larger = fewer clusters
         "clusterProperties": { // keep separate counts for each tiernitude category in a cluster - sum of ["case", tier1, 1, 0] - 1s if in tier1, 0s if not - tier1 is a boolean
@@ -217,7 +223,7 @@ document.addEventListener('click', function (e) {
 	        	return b.properties.rating - a.properties.rating;
 	        });
 	        
-	        var recs = sortedRecs.filter((x) => (x.properties.rating >= 8))
+	        recs = sortedRecs.filter((x) => (x.properties.rating >= 8))
 
 	        // if no recs, look for places >=6
 	        if (recs.length == 0) {
@@ -228,21 +234,23 @@ document.addEventListener('click', function (e) {
 		        var recList = []
 		        var noDupes = [] // keep track of what's here to count number of locations?		        
 		        var displayCount = recs.length >= 20 ? 20 : recs.length	
-		        var recHTML = "<div class='displayRecsHeader'>Some recs! Faves are &#x1F31F'd</div><br>"
+		        recHTML = "<div class='displayRecsHeader'>Some recs! Faves are &#x1F31F'd</div><br>"
 	        	for (i=0; i < displayCount; i++) {
 	        		// var rec = {}
 	        		// show unique list of no more than 10 recs
 	        		if (!noDupes.includes(recs[i].properties.id) && noDupes.length <= 10){
 	        			
 	        			var fav = recs[i].properties.rating == 10 ? '&#x1F31F' : ''
-	        			var count = recs.filter((restaurant) => (restaurant.properties.id == recs[i].properties.id)).length
-	        			console.log(recs[i].properties.restaurant, ' has ', count, ' locations')
+	        			var allLocations = recs.filter((restaurant) => (restaurant.properties.id == recs[i].properties.id))
+	        			var numLocations = allLocations.length
+	        			console.log(allLocations)
+	        			// console.log(recs[i].properties.restaurant, ' has ', numLocations, ' locations')
 
 	        			// not all places have websites
 	        			if (recs[i].properties.yelpurl == null) {
-	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' data-coordinates=' + recs[i].geometry.coordinates + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'
+	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' data-coordinates=' + recs[i].geometry.coordinates + ' class=displayRecs>' + fav + recs[i].properties.restaurant + ' - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'
 	        			} else {
-	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' data-coordinates=' + recs[i].geometry.coordinates + ' class=displayRecs ' + recs[i].properties.id + '>' + fav + '<a target="_blank" href="' + recs[i].properties.yelpurl + '">' + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'	
+	        				recHTML = recHTML + '<div data-id=' + recs[i].properties.id + ' data-coordinates=' + recs[i].geometry.coordinates + ' class=displayRecs>' + fav + '<a target="_blank" href="' + recs[i].properties.yelpurl + '">' + recs[i].properties.restaurant + '</a> - ' + recs[i].properties.city + ' (' + recs[i].properties.cuisine + ') </div>'	
 	        			}
 	        				        			
 	        			// console.log(recHTML)
@@ -255,10 +263,11 @@ document.addEventListener('click', function (e) {
 				        // recList.push(rec)
 	        		} 
         		}        			        	
+        		currentZoom = map.getZoom() + 2
         		map.flyTo({center: recs[0].geometry.coordinates, zoom: map.getZoom() + 2});	
 	        } else {
 	        	// no recs 
-	        	var recHTML = "<div class=displayRecs>Let's just say that I didn't starve when I was in " + sortedRecs[0].properties.city + '. </div>'
+	        	recHTML = "<div class=displayRecs>Let's just say that I didn't starve when I was in " + sortedRecs[0].properties.city + '. </div>'
 	        	// have map zoom to towards cluster-just use the top rec to ballpark
 	        	map.flyTo({center: sortedRecs[0].geometry.coordinates, zoom: map.getZoom() + 2});	
 	        }
@@ -275,13 +284,44 @@ document.addEventListener('click', function (e) {
 	// - hover shows photo or preview of yelp??
 document.getElementById('infoBox').addEventListener('click', function(e){
 	
+	var restaurantLocs = recs.filter((restaurant) => (restaurant.properties.id == e.target.dataset.id))
+	console.log(restaurantLocs)
+	var allLocHTML = "<div class='displayRecsHeader'><strong>" + restaurantLocs[0].properties.restaurant  + " Locations</strong></div><br>"	
+	for(i=0; i < restaurantLocs.length; i++) {
+		console.log(restaurantLocs[i].properties.phone)
+		var phoneDisplay = restaurantLocs[i].properties.phone == null ? '' : restaurantLocs[i].properties.phone
+				// not all places have websites
+		if (restaurantLocs[i].properties.yelpurl == null) {
+			allLocHTML = allLocHTML + '<div data-id=' + e.target.dataset.id + ' data-coordinates=' + restaurantLocs[i].geometry.coordinates + ' class=displayRecs>' + restaurantLocs[i].properties.streetaddress + ', ' + restaurantLocs[i].properties.city +' <br> ' + phoneDisplay + ' </div>'
+		} else {
+			allLocHTML = allLocHTML + '<div data-id=' + e.target.dataset.id + ' data-coordinates=' + restaurantLocs[i].geometry.coordinates + ' class=displayRecs>' + restaurantLocs[i].properties.streetaddress + ', ' + restaurantLocs[i].properties.city + '<br><a target="_blank" href="' + restaurantLocs[i].properties.yelpurl + '">' + restaurantLocs[i].properties.yelprating + ' 		&#9733 on ' + restaurantLocs[i].properties.reviewcount + ' Yelp Reviews</a> '+' <br> ' + phoneDisplay + '</div>'
+		}
+
+	}
+
+	allLocHTML = allLocHTML + '<br><div id="buttonBox"><button type = "button" id="showRecsButton"> Back to Recommendations </button></div>' 
+
+	document.getElementById('infoBox').innerHTML = allLocHTML
+
+	//add event listener to trigger button to show recommended 
+	var recButton = document.getElementById('showRecsButton')
+
+	recButton.addEventListener('click', () => {		
+		
+		map.flyTo({center: loc, zoom: currentZoom});	 // or should i zoom to 
+		document.getElementById('infoBox').innerHTML = recHTML
+	})
+
+	// fly to place
 	var loc = [parseFloat(e.target.dataset.coordinates.split(',')[0]), parseFloat(e.target.dataset.coordinates.split(',')[1])]
 	map.flyTo({center: loc, zoom: 16});	
 })
 
+
+	
 // popup window on marker click
 map.on('click', 'earthquake_circle', function(e) {
-	// console.log(e.features[0].properties.description)
+	console.log(e.features[0].properties)
 	// console.log(e.features[0].geometry.coordinates)
 	// console.log(e.features[0])
 	var coordinates = e.features[0].geometry.coordinates.slice();

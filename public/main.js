@@ -101,10 +101,11 @@ map.on('load', function () {
             	// console.log(id)
                 var el = createDonutChart(props);
                 // console.log(el)                
-                marker = markers[id] = new mapboxgl.Marker({element: el}).setLngLat(coords);                
+                marker = markers[id] = new mapboxgl.Marker({element: el}).setLngLat(coords);
+                
             }
             newMarkers[id] = marker;
-            // console.log(newMarkers)
+            console.log(newMarkers)
             if (!markersOnScreen[id])
                 marker.addTo(map);
         }
@@ -173,15 +174,3 @@ function donutSegment(start, end, r, r0, color) {
         r0, r0, 0, largeArc, 0, r + r0 * x0, r + r0 * y0,
         '" fill="' + color + '" />'].join(' ');
 }
-
-document.addEventListener('click', function (e) {
-    if (hasClass(e.target, 'mapboxgl-marker')) {
-    	console.log(this)
-    	console.log(e)
-        // .bu clicked
-        // Do your thing
-    } else if (hasClass(e.target, 'test')) {
-        // .test clicked
-        // Do your other thing
-    }
-}, false);
