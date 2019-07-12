@@ -2,6 +2,7 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+	/*background-color: #e0ecf5;*/
 }
 h3{	
 	padding: 0;
@@ -148,13 +149,15 @@ h1{
 		bottom: 0;
 		width: 80%;
 		left: 20%;
+		height: 100vh;
 	}
 
 	#infoBox{		
 		display: block;
 		width: 20%;
+		height: 100vh;
 		padding-top: 15px;
-		overflow-y: hidden;
+		overflow-y: scroll;
 		background-color: #e0ecf5;
 	}
 
