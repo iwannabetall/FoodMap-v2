@@ -1,0 +1,17 @@
+html, body{
+	background-color:#ffbf27;
+	/*padding-left: 50px;*/
+}
+
+h1{
+	color: #d5152e;
+	text-align: center;
+}
+.form-container{
+	display: block;
+	width: 80%;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 20px;
+
+}

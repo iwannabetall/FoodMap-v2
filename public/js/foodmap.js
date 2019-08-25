@@ -302,6 +302,13 @@ document.getElementById('infoBox').addEventListener('click', function(e){
 
 })
 
+document.getElementById('infoBox').addEventListener('hover', function(e) {
+  if (e.target.className == 'locations') {
+    var loc = [parseFloat(e.target.dataset.coordinates.split(',')[0]), parseFloat(e.target.dataset.coordinates.split(',')[1])]
+    console.log(loc)
+  }
+})
+
 
 function createAllLocHTML(dataObj) {
 	console.log(dataObj)

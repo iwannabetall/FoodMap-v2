@@ -1,0 +1,46 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		title More Data! Yayyy
+		script(type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js')
+		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+		meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
+		link(rel='stylesheet' href='/css/newEntry.css')
+		script(type='text/javascript', src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous")
+		script(type='text/javascript', src='/js/newEntry.js')
+		//- link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+	body
+		h1 Select the Correct Places
+		.form-container
+			form#saveYelpData(action='/savenewdata', method='POST')
+				select(name='region')
+					each row in regions
+						option(value=row.region) #{row.region}
+				each r in yelpResults
+					- var yelpurl = r.url.split('?')[0];
+					- var categories = r.categories.map((x) => (x.title));
+					br
+					.results(id=r.alias + '_results')
+						input(type='checkbox' id='addMe_' + r.alias value=r.alias)
+						label(for='addMe_' + r.alias) #{r.name}
+						br
+						a(href=r.url.split('?')[0]) #{r.alias}
+						input(type='hidden' name='selected' value='ignore' id=r.alias)
+						input(type='hidden' name='restaurant' value=r.name)
+						input(type='hidden' name='alias' value=r.alias)
+						input(type='hidden' name='latitude' value=r.coordinates.latitude)
+						input(type='hidden' name='longitude' value=r.coordinates.longitude)
+						input(type='hidden' name='phone' value=r.display_phone)
+						input(type='hidden' name='yelpurl' value=yelpurl)
+						input(type='hidden' name='rating' value=r.rating)
+						input(type='hidden' name='reviewcount' value=r.review_count)
+						input(type='hidden' name='categories' value=categories)
+						input(type='hidden' name='streetaddress' value=r.location.display_address[0])
+						input(type='hidden' name='location' value=r.location.display_address[1])
+						input(type='hidden' name='city' value=r.location.city)
+						input(type='hidden' name='state' value=r.location.state)
+					//- p #{r.name}					
+				.form-group.row
+					.col-sm-10
+						button#submit.btn.btn-primary(type='submit') Save
