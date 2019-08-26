@@ -7,27 +7,28 @@ html
 		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
 		meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
 		link(rel='stylesheet' href='/css/newEntry.css')
-		script(type='text/javascript', src='/js/newEntry.js')
+		script(type='text/javascript', src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous")
+		script(type='text/javascript', src='/js/newReview.js')
 		//- link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
 	body
-		h3 Review for #{newID}
+		h3 Write a New Review!
 		.form-container
-			form#newDatapoint(action='/newdata', method='POST')
-				select(name='restaurant_id')
+			form#newDatapoint(action='/savereview', method='POST', autocomplete='off')
+				select#restaurant_id(name='restaurant_id')
 					each r in reviewed
-						option(value=r.restaurant_id + '_' + r.restaurant) #{r.restaurant}
+						option(value=r.restaurant_id) #{r.restaurant}				
 				.form-group.row
 					label.col-sm-2.col-form-label(for='restaurant') Restaurant
 					.col-sm-10
 						input#restaurant.form-control(type='text', placeholder='Restaurant', name='restaurant')
-				.form-group.row
-					label.col-sm-2.col-form-label(for='city') City
-					.col-sm-10
-						input#city.form-control(type='text', placeholder='City', name='city')
-				.form-group.row
-					label.col-sm-2.col-form-label(for='state') State
-					.col-sm-10
-						input#state.form-control(type='text', placeholder='State', name='state')
+				//- .form-group.row
+				//- 	label.col-sm-2.col-form-label(for='city') City
+				//- 	.col-sm-10
+				//- 		input#city.form-control(type='text', placeholder='City', name='city')
+				//- .form-group.row
+				//- 	label.col-sm-2.col-form-label(for='state') State
+				//- 	.col-sm-10
+				//- 		input#state.form-control(type='text', placeholder='State', name='state')
 				.form-group.row
 					label.col-sm-2.col-form-label(for='rating') Rating
 					.col-sm-10
@@ -47,7 +48,7 @@ html
 				.form-group.row
 					label.col-sm-2.col-form-label(for='priceDetails') Price Details
 					.col-sm-10
-						input#priceDetails.form-control(type='text', placeholder='How Pricey/Fair', name='priceDetails')
+						input#priceDetails.form-control(type='text', placeholder='Ex of Price Range', name='priceDetails')
 				.form-group.row
 					label.col-sm-2.col-form-label(for='itemsTried') Items Tried
 					.col-sm-10
@@ -57,13 +58,25 @@ html
 					.col-sm-10
 						input#thoughts.form-control(type='text', placeholder='How was it?', name='thoughts')
 				.form-group.row
-					label.col-sm-2.col-form-label(for='return') Would I Return?
+					label.col-sm-2.col-form-label(for='wouldireturn') Would I Return?
 					.col-sm-10
-						input#return.form-control(type='text', placeholder='Would I Return?', name='return')
+						input#return.form-control(type='text', placeholder='Would I Return?', name='wouldireturn')
+				.form-group.row
+					label.col-sm-2.col-form-label(for='highlights') Highlights
+					.col-sm-10
+						input#return.form-control(type='text', placeholder='Any highlights?', name='highlights')
+				.form-group.row
+					label.col-sm-2.col-form-label(for='goodfor') Good For?
+					.col-sm-10
+						input#return.form-control(type='text', placeholder='Good for Lunch vs Dinner?', name='goodfor')
 				.form-group.row
 					label.col-sm-2.col-form-label(for='website') Website
 					.col-sm-10
-						input#website.form-control(type='text', placeholder='Would I Return?', name='website')
+						input#website.form-control(type='text', name='website')
+				.form-group.row
+					label.col-sm-2.col-form-label(for='password') Password
+					.col-sm-10
+						input#website.form-control(type='password', placeholder='Do you wanna save?', name='password')
 				.form-group.row
 					.col-sm-10
-						button#submit.btn.btn-primary(type='submit') Find On Yelp
+						button#submit.btn.btn-primary(type='submit') Submit New Data

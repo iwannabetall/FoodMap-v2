@@ -40,7 +40,9 @@ html
 						input(type='hidden' name='location' value=r.location.display_address[1])
 						input(type='hidden' name='city' value=r.location.city)
 						input(type='hidden' name='state' value=r.location.state)
-					//- p #{r.name}					
+				br
+				input(type='password' name='password' placeholder="Password")
+				br
 				.form-group.row
 					.col-sm-10
 						button#submit.btn.btn-primary(type='submit') Save

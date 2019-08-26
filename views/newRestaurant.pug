@@ -7,6 +7,7 @@ html
 		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
 		meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
 		link(rel='stylesheet' href='/css/newEntry.css')
+		script(type='text/javascript', src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous")
 		script(type='text/javascript', src='/js/newEntry.js')
 		//- link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
 	body
@@ -26,4 +27,6 @@ html
 						input#state.form-control(type='text', placeholder='State', name='state')
 				.form-group.row
 					.col-sm-10
-						button#submit.btn.btn-primary(type='submit') Find On Yelp
+						button#submit.btn.btn-primary(type='submit') Find On Yelp		
+		.col-sm-10
+			button.btn.btn-primary(type='button' onclick="location.href='/review'") Review Only

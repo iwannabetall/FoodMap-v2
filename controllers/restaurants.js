@@ -1,8 +1,6 @@
 const { Pool } = require('pg');
 
-
 // const { Pool } = require('pg');
-
 // // production side 
 // const pool = new Pool({	
 //   connectionString: process.env.DATABASE_URL,
@@ -227,7 +225,7 @@ exports.saveNewLocations = async (req, res, next) => {
 				}
 				var catString = catArray.join(', ')
 				
-				var text = 'INSERT INTO testinfo(restaurant_id, restaurant, alias, yelpurl, reviewcount, yelprating, longitude, latitude, is_closed, phone, streetaddress, location, categories, city, state, region) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *';
+				var text = 'INSERT INTO restaurantinfo(restaurant_id, restaurant, alias, yelpurl, reviewcount, yelprating, longitude, latitude, is_closed, phone, streetaddress, location, categories, city, state, region) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *';
 				var values = [maxid, req.body.restaurant[i], req.body.alias[i], req.body.yelpurl[i], req.body.reviewcount[i], req.body.rating[i], req.body.longitude[i], req.body.latitude[i], false, req.body.phone[i], req.body.streetaddress[i], req.body.location[i], catString, req.body.city[i], req.body.state[i], req.body.region]
 
 				client
@@ -259,7 +257,7 @@ exports.getReviewed = async (req, res, next) => {
 			console.log(err.stack)
 			next(err)
 		} else {
-			console.log(results)
+			console.log(results.rows[0])
 			
 			res.locals.reviewed = results.rows			
 			next()
@@ -268,6 +266,47 @@ exports.getReviewed = async (req, res, next) => {
 
 }
 
+exports.checkCode = (req, res, next) => {
+	console.log(process.env.CODE)
+	if (req.body.password == process.env.CODE) {
+		next()
+	} else {
+		res.send('Incorrect Password')
+	}
+}
+
 exports.loadNewReviewForm = (req, res, next) => {
 	res.render('newReview', { 'reviewed': res.locals.reviewed})
+}
+
+exports.saveReview = async (req, res, next) => {
+	console.log(req.body)	
+	try {
+		// get max id to create a unique id to tie restaurant info and review tables together
+		const client = await pool.connect()
+				
+		var text = 'INSERT INTO revtest(id, restaurant, rating, cuisine, pricerange, value, pricedetails, tried, thoughts, wouldireturn, highlights, goodfor, website) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *';
+		var values = [req.body.restaurant_id, req.body.restaurant, req.body.rating, req.body.cuisine, req.body.priceRange, req.body.value, req.body.priceDetails, req.body.itemsTried, req.body.thoughts, req.body.wouldireturn, req.body.highlights, req.body.goodfor, req.body.website]
+
+		client
+			.query(text, values)
+			.then(res => {
+				console.log(res.rows[0])				
+			})
+			.catch(e => console.error(e.stack))			
+		res.locals.restaurant = req.body.restaurant
+		res.locals.addedID = req.body.restaurant_id
+	    // console.log(result.rows)
+	    client.release();
+	    next()
+	} catch (err) {    			
+		console.error(err);
+		res.send("Error " + err);
+	}
+
+
+}
+
+exports.saveSuccessful = (req, res, next) => {
+	res.render("success", {newData: res.locals.restaurant, newId:res.locals.addedID})
 }
