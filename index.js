@@ -14,15 +14,15 @@ app.use(
   })
 )
 
-// const PORT = process.env.PORT || 5000
-const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
+const PORT = process.env.PORT || 5000
+// const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
 
 app
 	.use(express.static(path.join(__dirname, 'public')))
 	.set('views', path.join(__dirname, 'views'))
 	.set('view engine', 'pug')
   .get('/', reviews.getData, reviews.reformatToGeoJSON, reviews.earthquake)
-  .get('/new', reviews.newData)
+  .get('/new', reviews.newData)  // add new yelp place
   .post('/yelpresults', reviews.getYelpData, reviews.getRegions, reviews.loadResults)
   .post('/savenewdata', reviews.checkCode, reviews.saveNewLocations, reviews.getReviewed, reviews.loadNewReviewForm)
   .post('/savereview', reviews.checkCode, reviews.saveReview, reviews.saveSuccessful) //save the new reviews

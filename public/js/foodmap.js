@@ -370,7 +370,8 @@ function createReviewHTML(dataObj) {
 // if click on an individual restaurant location
 map.on('click', 'earthquake_circle', function(e) {
 	console.log(e.features[0].properties.id)
-
+  console.log(e.features[0].properties.city)
+  
 	var selectedLocations = reviews.features.filter((restaurant) => (restaurant.properties.id == e.features[0].properties.id && (restaurant.properties.city == e.features[0].properties.city)))
 
 	console.log(selectedLocations)

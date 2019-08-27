@@ -1,17 +1,18 @@
 const { Pool } = require('pg');
 
-// const { Pool } = require('pg');
-// // production side 
-// const pool = new Pool({	
-//   connectionString: process.env.DATABASE_URL,
-//   user: process.env.USER,
-//   password: process.env.PASSWORD,
-//   database: process.env.DATABASE,
-//   port: process.env.PORT,
-//   host: process.env.HOST,
-//   ssl: true
-//   // sslfactory: org.postgresql.ssl.NonValidatingFactory
-// });
+
+const { Pool } = require('pg');
+// production side 
+const pool = new Pool({	
+  connectionString: process.env.DATABASE_URL,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.PORT,
+  host: process.env.HOST,
+  ssl: true
+  // sslfactory: org.postgresql.ssl.NonValidatingFactory
+});
 
 
 'use strict';
@@ -285,7 +286,7 @@ exports.saveReview = async (req, res, next) => {
 		// get max id to create a unique id to tie restaurant info and review tables together
 		const client = await pool.connect()
 				
-		var text = 'INSERT INTO revtest(id, restaurant, rating, cuisine, pricerange, value, pricedetails, tried, thoughts, wouldireturn, highlights, goodfor, website) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *';
+		var text = 'INSERT INTO reviews(id, restaurant, rating, cuisine, pricerange, value, pricedetails, tried, thoughts, wouldireturn, highlights, goodfor, website) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *';
 		var values = [req.body.restaurant_id, req.body.restaurant, req.body.rating, req.body.cuisine, req.body.priceRange, req.body.value, req.body.priceDetails, req.body.itemsTried, req.body.thoughts, req.body.wouldireturn, req.body.highlights, req.body.goodfor, req.body.website]
 
 		client
@@ -303,7 +304,6 @@ exports.saveReview = async (req, res, next) => {
 		console.error(err);
 		res.send("Error " + err);
 	}
-
 
 }
 
