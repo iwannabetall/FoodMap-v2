@@ -16,6 +16,11 @@ h1{
 
 }
 
+.textBox {
+	/*overflow: scroll;*/
+	min-height: 100px;
+}
+
 #restaurant_id{
 	margin-bottom: 10px;
 	margin-top: 10px;

@@ -7,13 +7,14 @@ const { Pool } = require('pg');
 
 const reviews = require('./controllers/restaurants.js')
 
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
-
+// app.use(bodyParser.json())
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true,
+//   })
+// )
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000
 // const PORT = 5000  // WHY CANT YOU USE 5432 FOR LOCALHOST?!
 
@@ -25,9 +26,11 @@ app
   .get('/new', reviews.newData)  // add new yelp place
   .post('/yelpresults', reviews.getYelpData, reviews.getRegions, reviews.loadResults)
   .post('/savenewdata', reviews.checkCode, reviews.saveNewLocations, reviews.getReviewed, reviews.loadNewReviewForm)
-  .post('/savereview', reviews.checkCode, reviews.saveReview, reviews.saveSuccessful) //save the new reviews
+  .post('/savereview', reviews.checkCode, reviews.newOrUpdate, reviews.saveReview, reviews.saveSuccessful) //save the new reviews
   // .get('/noyelpdata') //form for places with no yelp data and need to manually log everything
   .get('/review', reviews.getReviewed, reviews.loadNewReviewForm)  // if logged restaurant and need to write review later or want to update/add to previous review 
+  .get('/update', reviews.getCurrentReview) 
+
 // client.query('SELECT NOW() as now')
 //   .then(res => console.log(res.rows[0]))
 //   .catch(e => console.error(e.stack))

@@ -8,7 +8,7 @@ html
 		meta(name='viewport', content='initial-scale=1,maximum-scale=1,user-scalable=no')
 		link(rel='stylesheet' href='/css/newEntry.css')
 		script(type='text/javascript', src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous")
-		script(type='text/javascript', src='/js/newReview.js')
+		script(type='text/javascript', src='/js/updateReview.js')
 		//- link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
 	body
 		h3 Write a New Review!
@@ -17,7 +17,6 @@ html
 				select#restaurant_id(name='restaurant_id')
 					each r in reviewed
 						option(value=r.restaurant_id) #{r.restaurant}				
-				button#update(type='button') Update Review
 				.form-group.row
 					label.col-sm-2.col-form-label(for='restaurant') Restaurant
 					.col-sm-10
@@ -53,11 +52,11 @@ html
 				.form-group.row
 					label.col-sm-2.col-form-label(for='itemsTried') Items Tried
 					.col-sm-10
-						textarea#itemsTried.textBox.form-control(type='text', placeholder='What did I try?', name='itemsTried')
+						input#itemsTried.form-control(type='text', placeholder='What did I try?', name='itemsTried')
 				.form-group.row
 					label.col-sm-2.col-form-label(for='thoughts') Thoughts
 					.col-sm-10
-						textarea#thoughts.textBox.form-control(type='text', placeholder='How was it?', name='thoughts')
+						input#thoughts.form-control(type='text', placeholder='How was it?', name='thoughts')
 				.form-group.row
 					label.col-sm-2.col-form-label(for='wouldireturn') Would I Return?
 					.col-sm-10
