@@ -226,7 +226,7 @@ exports.saveNewLocations = async (req, res, next) => {
 
 			client
 				.query(text, values)
-				.then(res => {
+				.then(results => {
 					console.log('added ', req.body.restaurant)
 					entryCount = entryCount + 1
 					// console.log(res.rows[0])
@@ -255,7 +255,7 @@ exports.saveNewLocations = async (req, res, next) => {
 
 					client
 						.query(text, values)
-						.then(res => {
+						.then(results => {
 							console.log('added ', req.body.restaurant[i])
 							entryCount = entryCount + 1
 							// console.log(res.rows[0])
@@ -343,8 +343,8 @@ exports.saveReview = async (req, res, next) => {
 
 			client
 				.query(text, values)
-				.then(res => {
-					console.log(res.rows[0])				
+				.then(results => {
+					console.log(results.rows[0])				
 				})
 				.catch(e => console.error(e.stack))			
 			res.locals.restaurant = req.body.restaurant
@@ -367,7 +367,7 @@ exports.saveReview = async (req, res, next) => {
 
 			client
 				.query(text, values)
-				.then(res => {
+				.then(results => {
 					res.locals.restaurant = req.body.restaurant
 					res.locals.addedID = req.body.restaurant_id
 				    // console.log(result.rows)
